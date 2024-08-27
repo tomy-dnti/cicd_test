@@ -11,21 +11,27 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.11 ,3.12]
+        python-version: [3.11, 3.12]
 
     steps:
-    - uses: actions/checkout@v2        # リポジトリのコードをチェックアウト
-    - name: Set up Python ${{ matrix.python-version }}  # Pythonをセットアップ
-      uses: actions/setup-python@v2    # Python環境をセットアップするアクション
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.python-version }}  # マトリックスで指定したバージョンを使用
+        python-version: ${{ matrix.python-version }}
 
-    - name: Install dependencies       # 依存関係のインストールステップ
-      run: |                           # 複数行のコマンドを実行
-        python -m pip install --upgrade pip  # pipを最新版にアップグレード
-        pip install pytest             # pytestをインストール
-        pip install -r requirements.txt  # requirements.txtから依存関係をインストール
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+        pip install -r requirements.txt
 
-    - name: Run pytest                 # pytestを実行するステップ
-      run: |                           # 複数行のコマンドを実行
-        pytest                         # pytestコマンドを実行
+    - name: Display current directory and list files
+      run: |
+        pwd
+        ls -R
+
+    - name: Run pytest
+      run: |
+        export PYTHONPATH=$PYTHONPATH:$(pwd)
+        pytest -v
